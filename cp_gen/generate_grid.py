@@ -3,16 +3,16 @@ from math import radians, cos, sqrt
 
 class GenerateGridPoints(object):
 
-    def __init__(self):
+    def __init__(self, dx, dy, nx, ny, x0, y0, theta):
 
-        self.dx = 80
-        self.dy = 100
-        self.nx = 75
-        self.ny = 56
-        self.x0 = 366046.90992691246
-        self.y0 = 6249318.971364301
-        self.theta_i = radians(33.3)
-        self.theta_j = radians(56.7)
+        self.dx = dx
+        self.dy = dy
+        self.nx = nx
+        self.ny = ny
+        self.x0 = x0
+        self.y0 = y0
+        self.theta_i = radians(90-theta)
+        self.theta_j = radians(theta)
         self.grid_vector = list()
 
     def calc_i_new(self, x0, y0):

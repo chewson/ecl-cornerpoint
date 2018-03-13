@@ -6,11 +6,18 @@ from heapq import nsmallest
 
 class InterpretMapValues(object):
 
-    def __init__(self):
+    def __init__(self, fault_line_file,fault_elevation_file,res_file,height_file,map_type):
 
-        self.fault_line_file = 'fault_line.csv'
-        self.fault_elevation_file = 'fault_depth.csv'
-        self.res_file = 'combined.csv'
+        self.fault_line_file = fault_line_file
+        self.fault_elevation_file = fault_elevation_file
+        self.res_file = res_file
+        self.height_file = height_file
+
+        if map_type == 'open':
+            self.num_repeats = 0
+        elif map_type == 'closed':
+            self.num_repeats = 1
+
         self.file_name = str()
         self.new_value = float()
 
@@ -40,20 +47,22 @@ class InterpretMapValues(object):
 
         return easting, northing, value
 
-    def check_fault_side(self, new_e, new_n):
+    def check_fault_side(self, new_e, new_n, height=False):
         easting, northing, value = self.read_csv_file(self.fault_line_file)
         distance = self.distance_between_pts(new_e, new_n, easting, northing)
 
         f_eidx = distance.index(min(distance))
 
         f_e = easting[f_eidx]
-
-        if (f_e - new_e) < 0:
-            self.file_name = self.res_file
-        elif (f_e - new_e) > 0:
-            self.file_name = self.fault_elevation_file
+        if height:
+            self.file_name = self.height_file
         else:
-            self.file_name = self.fault_elevation_file
+            if (f_e - new_e) < 0:
+                self.file_name = self.res_file
+            elif (f_e - new_e) > 0:
+                self.file_name = self.fault_elevation_file
+            else:
+                self.file_name = self.fault_elevation_file
 
     def find_new_pts(self, new_e, new_n):
 
@@ -74,7 +83,7 @@ class InterpretMapValues(object):
                 chosen_easting.append(easting[i])
                 chosen_northing.append(northing[i])
             elif len(chosen_northing) < 4:
-                if chosen_values.count(value[i]) > 1:
+                if chosen_values.count(value[i]) > (self.num_repeats+1):
                     pass
                 else:
                     chosen_values.append(value[i])
