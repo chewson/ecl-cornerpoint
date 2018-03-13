@@ -3,12 +3,13 @@ from math import radians, cos, sqrt
 
 class GenerateGridPoints(object):
 
-    def __init__(self, dx, dy, nx, ny, x0, y0, theta):
+    def __init__(self, dx, dy, nx, ny, nz, x0, y0, theta):
 
         self.dx = dx
         self.dy = dy
         self.nx = nx
         self.ny = ny
+        self.nz = nz
         self.x0 = x0
         self.y0 = y0
         self.theta_i = radians(90-theta)

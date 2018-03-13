@@ -1,3 +1,3 @@
 from .generate_grid import GenerateGridPoints
 from .interpolate_vector import InterpretMapValues
-from .generate_coord import GenerateCOORD
+from .generate_ecl_files import GenerateGridFiles

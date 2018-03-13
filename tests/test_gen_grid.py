@@ -1,6 +1,6 @@
 import unittest
 import os
-from cp_gen import GenerateGridPoints, InterpretMapValues, GenerateCOORD
+from cp_gen import GenerateGridPoints, InterpretMapValues, GenerateGridFiles
 
 
 class TestCpGen(unittest.TestCase):
@@ -38,10 +38,11 @@ class TestCpGen(unittest.TestCase):
         dy = 100
         nx = 75
         ny = 56
+        nz = 6
         x0 = 366046.90992691246
         y0 = 6249318.971364301
         theta = 56.7
-        grid_points = GenerateGridPoints(dx, dy, nx, ny, x0, y0, theta)
+        grid_points = GenerateGridPoints(dx, dy, nx, ny, nz, x0, y0, theta)
 
         grid_points.gen_grid_vector()
 
@@ -58,19 +59,22 @@ class TestCpGen(unittest.TestCase):
         dy = 100
         nx = 75
         ny = 56
+        nz = 6
         x0 = 366046.90992691246
         y0 = 6249318.971364301
         theta = 56.7
 
         grid_interpret = InterpretMapValues(fault_line_file, fault_elevation_file, res_file, height_file, 'open')
 
-        grid_points = GenerateGridPoints(dx, dy, nx, ny, x0, y0, theta)
+        grid_points = GenerateGridPoints(dx, dy, nx, ny, nz, x0, y0, theta)
 
         grid_points.gen_grid_vector()
 
-        coord = GenerateCOORD(grid_points,grid_interpret)
+        coord = GenerateGridFiles(grid_points, grid_interpret)
         coord.generate_coord_vector()
         coord.print_coord_vector()
+        coord.generate_zcorn_vector()
+        coord.print_zcorn_vector()
 
 
 if __name__ == '__main__':
