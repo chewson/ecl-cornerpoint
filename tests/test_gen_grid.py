@@ -1,6 +1,6 @@
 import unittest
 import os
-from cp_gen import GenerateGridPoints, InterpretMapValues
+from cp_gen import GenerateGridPoints, InterpretMapValues, GenerateCOORD
 
 
 class TestCpGen(unittest.TestCase):
@@ -46,6 +46,31 @@ class TestCpGen(unittest.TestCase):
         grid_points.gen_grid_vector()
 
         assert (len(grid_points.grid_vector)==((nx+1)*(ny+1)))
+
+    def test_generate_coord(self):
+        current_dir = os.path.dirname(__file__)
+        fault_line_file = os.path.join(current_dir, 'test_data', 'fault_line.csv')
+        fault_elevation_file = os.path.join(current_dir, 'test_data', 'fault_depth.csv')
+        res_file = os.path.join(current_dir, 'test_data', 'res_depths.csv')
+        height_file = os.path.join(current_dir, 'test_data', 'height.csv')
+
+        dx = 80
+        dy = 100
+        nx = 75
+        ny = 56
+        x0 = 366046.90992691246
+        y0 = 6249318.971364301
+        theta = 56.7
+
+        grid_interpret = InterpretMapValues(fault_line_file, fault_elevation_file, res_file, height_file, 'open')
+
+        grid_points = GenerateGridPoints(dx, dy, nx, ny, x0, y0, theta)
+
+        grid_points.gen_grid_vector()
+
+        coord = GenerateCOORD(grid_points,grid_interpret)
+        coord.generate_coord_vector()
+        coord.print_coord_vector()
 
 
 if __name__ == '__main__':
