@@ -64,6 +64,18 @@ class InterpretMapValues(object):
             else:
                 self.file_name = self.fault_elevation_file
 
+    def check_side(self, north, east, new_north, new_east):
+        side = str()
+        if north > new_north:
+            side = side + 'top'
+        if north < new_north:
+            side = side + 'bottom'
+        if east > new_east:
+            side = side + 'right'
+        if east < new_east:
+            side = side + 'left'
+        return side
+
     def find_new_pts(self, new_e, new_n):
 
         filename = self.file_name
@@ -83,7 +95,7 @@ class InterpretMapValues(object):
                 chosen_easting.append(easting[i])
                 chosen_northing.append(northing[i])
             elif len(chosen_northing) < 4:
-                if chosen_values.count(value[i]) > (self.num_repeats+1):
+                if chosen_values.count(value[i]) > (self.num_repeats):
                     pass
                 else:
                     chosen_values.append(value[i])
@@ -94,4 +106,11 @@ class InterpretMapValues(object):
 
         interp_func = interp2d(chosen_easting, chosen_northing, chosen_values)
 
-        self.new_value = interp_func(new_e,new_n)
+        new_value = interp_func(new_e,new_n)
+
+        if new_value < min(chosen_values):
+            self.new_value = min(chosen_values)
+        elif new_value > max(chosen_values):
+            self.new_value = max(chosen_values)
+        else:
+            self.new_value = new_value

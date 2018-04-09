@@ -2,7 +2,7 @@
 
 class GenerateGridFiles(object):
 
-    def __init__(self, grid_vector, grid_interpolate):
+    def __init__(self, grid_vector, grid_interpolate, east_bound, north_bound):
 
         self.grid_vector = grid_vector
         self.grid_interpolate = grid_interpolate
@@ -17,6 +17,10 @@ class GenerateGridFiles(object):
 
         self.coord_file = 'COORD.in'
         self.zcorn_file = 'ZCORN.in'
+        self.actnum_file = 'ACTNUM.in'
+
+        self.east_bound = east_bound
+        self.north_bound = north_bound
 
     def calc_elevation(self, easting, northing, height=False):
 
@@ -122,5 +126,46 @@ class GenerateGridFiles(object):
                 f.write('\n')
                 row_counter = 0
 
+        f.write('/')
+        f.close()
+
+    def generate_actnum_vector(self):
+
+        self.actnum = list()
+
+        for k in range(self.nz):
+            for j in range(self.ny):
+                for i in range(self.nx):
+                    idx = (self.nx * j) + i
+                    coordinates = self.grid_vector.grid_vector[idx]
+
+                    easting = coordinates[0]
+                    northing = coordinates[1]
+
+                    if easting > self.east_bound:
+                        self.actnum.append(1)
+                    else:
+                        self.actnum.append(0)
+
+    def print_actnum_vector(self):
+
+        header = 'ACTNUM \n'
+
+        f = open(self.actnum_file, 'w')
+
+        f.writelines(header)
+
+        row_counter = 0
+
+        for vals in self.actnum:
+            f.write(str(vals) + ' ')
+            f.write('\n')
+            row_counter += 1
+
+            if row_counter == (self.nx):
+                f.write('\n')
+                row_counter = 0
+
+        f.write('\n')
         f.write('/')
         f.close()
