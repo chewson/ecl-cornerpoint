@@ -45,7 +45,7 @@ class GenerateGridFiles(object):
                 if h < 0:
                     h = 0
                 z2 = z1 + h
-                self.delta_z.append(h/self.ny)
+                self.delta_z.append(h/self.nz)
                 self.coord_vector.append([x1,y1,z1,x2,y2,z2])
 
     def print_coord_vector(self):

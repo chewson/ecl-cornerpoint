@@ -10,7 +10,7 @@ class TestCpGen(unittest.TestCase):
         easting = 367947.315968816
         northing = 6246378.058582101
         fault_line_file = os.path.join(current_dir,'test_data','fault_line.csv')
-        fault_elevation_file = os.path.join(current_dir, 'test_data', 'res_depths.csv')
+        fault_elevation_file = os.path.join(current_dir, 'test_data', 'fault_depth.csv')
         res_file = os.path.join(current_dir, 'test_data', 'res_depths.csv')
         height_file = os.path.join(current_dir, 'test_data', 'height.csv')
         grid_interpret = InterpretMapValues(fault_line_file,fault_elevation_file,res_file,height_file,'open')
